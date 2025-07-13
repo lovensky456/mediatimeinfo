@@ -1,0 +1,279 @@
+```html
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Media Time Info</title>
+<style>
+  /* Reset */
+  * {
+    margin: 0; padding: 0; box-sizing: border-box;
+  }
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f5f7fa;
+    color: #333;
+    line-height: 1.6;
+    transition: background 0.3s, color 0.3s;
+  }
+  body.dark {
+    background: #121212;
+    color: #eee;
+  }
+
+  header {
+    background: #0d6efd;
+    color: #fff;
+    padding: 2rem 1rem;
+    text-align: center;
+    box-shadow: 0 2px 5px rgb(0 0 0 / 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  }
+  header.dark {
+    background: #1a1a1a;
+    box-shadow: 0 2px 5px rgb(255 255 255 / 0.1);
+  }
+  header h1 {
+    font-weight: 700;
+    font-size: 2.5rem;
+    margin-bottom: 0.2rem;
+  }
+  header p {
+    font-size: 1.1rem;
+    font-weight: 300;
+  }
+
+  nav {
+    display: flex;
+    justify-content: center;
+    background: #0b5ed7;
+    box-shadow: 0 2px 5px rgb(0 0 0 / 0.1);
+    position: sticky;
+    top: 88px; /* height header */
+    z-index: 999;
+  }
+  nav.dark {
+    background: #222;
+    box-shadow: 0 2px 5px rgb(255 255 255 / 0.1);
+  }
+  nav a {
+    color: #fff;
+    text-decoration: none;
+    padding: 1rem 1.5rem;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+  }
+  nav a:hover {
+    background: #084298;
+  }
+  nav.dark a:hover {
+    background: #444;
+  }
+
+  main {
+    max-width: 900px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+  }
+
+  /* Section À la une */
+  .highlight {
+    margin-bottom: 2rem;
+  }
+  .highlight img {
+    width: 100%;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgb(0 0 0 / 0.1);
+    margin-bottom: 1rem;
+    object-fit: cover;
+    max-height: 300px;
+  }
+  .highlight h2 {
+    color: #0d6efd;
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+  }
+  .highlight p {
+    font-size: 1.1rem;
+  }
+
+  article {
+    background: #fff;
+    border-radius: 8px;
+    padding: 1.5rem 2rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 3px 8px rgb(0 0 0 / 0.1);
+    transition: background 0.3s, color 0.3s;
+  }
+  body.dark article {
+    background: #222;
+  }
+  article h2 {
+    color: #0d6efd;
+    margin-bottom: 0.5rem;
+  }
+  article time {
+    display: block;
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 1rem;
+  }
+  body.dark article time {
+    color: #aaa;
+  }
+
+  .whatsapp-buttons {
+    text-align: center;
+    margin: 2rem 0;
+  }
+  .whatsapp-buttons a {
+    background: #128C7E;
+    color: #fff;
+    text-decoration: none;
+    padding: 12px 25px;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 1.1rem;
+    box-shadow: 0 4px 12px rgb(18 140 126 / 0.6);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    display: inline-block;
+  }
+  .whatsapp-buttons a:hover {
+    background: #0f6b5b;
+    box-shadow: 0 6px 18px rgb(15 107 91 / 0.8);
+  }
+
+  footer {
+    background: #0d6efd;
+    color: #fff;
+    text-align: center;
+    padding: 1rem 0;
+    margin-top: 3rem;
+    font-size: 0.9rem;
+  }
+  body.dark footer {
+    background: #1a1a1a;
+  }
+
+  /* Mode sombre bouton */
+  .dark-mode-toggle {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    background: #fff;
+    border: none;
+    border-radius: 20px;
+    padding: 6px 12px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgb(0 0 0 / 0.2);
+    transition: background-color 0.3s ease;
+  }
+  .dark-mode-toggle:hover {
+    background: #e1e1e1;
+  }
+  body.dark .dark-mode-toggle {
+    background: #333;
+    color: #eee;
+  }
+  body.dark .dark-mode-toggle:hover {
+    background: #444;
+  }
+  /* Form newsletter */
+  .newsletter {
+    background: #0d6efd;
+    padding: 1.5rem 1rem;
+    border-radius: 10px;
+    color: white;
+    text-align: center;
+    box-shadow: 0 3px 10px rgb(13 110 253 / 0.6);
+    margin-bottom: 3rem;
+  }
+  .newsletter input[type="email"] {
+    padding: 0.6rem 1rem;
+    font-size: 1rem;
+    border: none;
+    border-radius: 30px 0 0 30px;
+    width: 250px;
+    max-width: 80%;
+    outline: none;
+  }
+  .newsletter button {
+    padding: 0.6rem 1.5rem;
+    font-size: 1rem;
+    border: none;
+    border-radius: 0 30px 30px 0;
+    background: #06b72a;
+    color: white;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  .newsletter button:hover {
+    background: #049820;
+  }
+
+  @media (max-width: 600px) {
+    nav {
+      flex-direction: column;
+      top: 112px;
+    }
+    nav a {
+      padding: 1rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    article {
+      padding: 1rem 1.2rem;
+    }
+    .newsletter input[type="email"] {
+      width: 70%;
+      margin-bottom: 0.8rem;
+      border-radius: 30px;
+    }
+    .newsletter button {
+      width: 70%;
+      border-radius: 30px;
+    }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Media Time Info</h1>
+  <p>Le journal indépendant du web</p>
+  <button class="dark-mode-toggle" aria-label="Activer le mode sombre">🌙</button>
+</header>
+
+<nav>
+  <a href="#">Accueil</a>
+  <a href="#">Articles</a>
+  <a href="#">À propos</a>
+  <a href="#">Contact</a>
+</nav>
+
+<main>
+
+  <!-- Section À la une -->
+  <section class="highlight" aria-label="Article à la une">
+    <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=900&q=80" alt="Image à la une" />
+    <h2>Article à la une : Les dernières tendances du web</h2>
+    <p>Découvrez les nouveautés et tendances qui révolutionnent le monde numérique en 2025.</p>
+  </section>
+
+  <!-- Newsletter -->
+  <section class="newsletter" aria-label="Formulaire d'inscription à la newsletter">
+    <h3>Inscrivez-vous à notre newsletter</h3>
+    <form onsubmit="event.preventDefault(); alert('Merci pour votre inscription !'); this.reset();">
+      <input type="email" placeholder="Votre email" required aria-label="Adresse email" />
+      <button type="submit">S’inscrire</button>
+    </form>
+  </section>
+
+  <!-- Articles -->
+  <article>
+    <h2x
+    
